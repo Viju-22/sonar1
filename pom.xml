@@ -15,9 +15,11 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<sonar.apiVersion>7.7</sonar.apiVersion>
 
 		<app.runtime>4.3.0-20210622</app.runtime>
 		<mule.maven.plugin.version>3.5.1</mule.maven.plugin.version>
+		<sonar.sources>src</sonar.sources>
 	</properties>
 
 	<build>
@@ -49,6 +51,20 @@
 					</cloudHubDeployment>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+				<artifactId>sonar-packaging-maven-plugin</artifactId>
+				<version>1.17</version>
+				<extensions>true</extensions>
+				<configuration>
+					<!-- the entry-point class that extends org.sonar.api.SonarPlugin -->
+					<pluginClass>com.mulesoft.services.tools.sonarqube.MulePlugin</pluginClass>
+					<pluginName>MulePlugin</pluginName>
+					<pluginKey>mulevalidationsonarqubeplugin-mule</pluginKey>
+					<!-- advanced properties can be set here. See paragraph "Advanced Build
+						Properties". -->
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -64,6 +80,20 @@
 			<artifactId>mule-sockets-connector</artifactId>
 			<version>1.2.1</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.sonarsource.sonarqube</groupId>
+			<artifactId>sonar-plugin-api</artifactId>
+			<!-- minimal version of SonarQube to support. Note that the groupId was
+				"org.codehaus.sonar" before version 5.2 -->
+			<version>${sonar.apiVersion}</version>
+			<!-- mandatory scope -->
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.sonarsource.analyzer-commons</groupId>
+			 <artifactId>sonar-xml-parsing</artifactId>
+			 <version>1.12.0.632</version>
 		</dependency>
 	</dependencies>
 
